@@ -33,7 +33,7 @@ class DataController(BaseController):
         clean_filename = clean_filename.replace(" ", "_")
         return clean_filename
 
-    def generate_unique_filename(self, original_filename: str, project_id: str):
+    def generate_unique_filepath(self, original_filename: str, project_id: str):
         project_path = ProjectController().get_project_path(project_id=project_id)
         random_perfix = self.generate_random_str()
         clean_filename = self.get_clean_file_name(original_filename=original_filename)
@@ -45,7 +45,7 @@ class DataController(BaseController):
                 project_path, random_perfix + "_" + clean_filename
             )
 
-        return new_file_path
+        return new_file_path, random_perfix + "_" + clean_filename
 
     async def upload_file(self, file, file_path):
         try:

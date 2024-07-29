@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, status
 from fastapi.responses import JSONResponse
-from controllers import DataController, ProjectController
+from controllers import DataController
 
 data_router = APIRouter(
     prefix="/api/v1/data",
@@ -23,7 +23,7 @@ async def upload_data(project_id: str, file: UploadFile):
         )
 
     # Get file path to upload
-    file_path = data_controller.generate_unique_filename(
+    file_path, file_id = data_controller.generate_unique_filepath(
         original_filename=file.filename,
         project_id=project_id,
     )
@@ -41,5 +41,8 @@ async def upload_data(project_id: str, file: UploadFile):
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content={"signal": result_signal},
+        content={
+            "signal": result_signal,
+            "file_id":file_id,
+        },
     )
