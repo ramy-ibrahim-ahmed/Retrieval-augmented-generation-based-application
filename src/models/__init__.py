@@ -1,2 +1,4 @@
-from .enums.ResponceEnums import ResponseSignal
-from .enums.ProcessingEnums import ProcessingEnum
+from .enums import ResponseSignal
+from .enums import ProcessingEnum
+from .ProjectModel import ProjectModel
+from .ChunkModel import ChunkModel

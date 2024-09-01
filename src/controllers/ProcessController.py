@@ -7,29 +7,24 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from models import ProcessingEnum
 
 
+# Process controller for chunk an uploaded file:
 class ProcessController(BaseController):
+
+    # Get project path:
     def __init__(self, project_id):
-        """_summary_
-        - use project ID to get project path from ProjectController.
-        """
         super().__init__()
         self.project_id = project_id
         self.project_path = ProjectController().get_project_path(project_id=project_id)
 
+    # Get file extention as the last slice of str:
     def get_file_extention(self, file_id: str):
-        """_summary_
-        - use file ID to get file extention as the last slice of str.
-        - returns the file extention.
-        """
         return os.path.splitext(file_id)[-1]
 
+    # Get file loader with path to load in:
     def get_file_loader(self, file_id: str):
-        """_summary_
-        - get file ID to get file extension.
-        - create file path using project path with file id.
-        - if extention is supported return loader with path.
-        - else None.
-        """
+        # 1. get file ID to get file extension.
+        # 2. create file path using project path with file id.
+        # 3. if extention is supported return loader with path.
         file_ext = self.get_file_extention(file_id=file_id)
         file_path = os.path.join(
             self.project_path,
@@ -41,26 +36,31 @@ class ProcessController(BaseController):
             return PyMuPDFLoader(file_path=file_path)
         return None
 
+    # Get file content by loader:
     def get_file_content(self, file_id: str):
-        """_summary_
-        - take the file ID and get suit loader to get dile content.
-        """
         loader = self.get_file_loader(file_id=file_id)
         return loader.load()
 
+    # Seperate file to chunks:
     def process_file_content(
         self,
         file_content: list,
         chunk_size: int = 100,
         chunk_overlap: int = 20,
     ):
+
+        # Split via chars:
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
             length_function=len,
         )
+
+        # List text chunks and metadata chunks from splitter:
         file_content_text = [rec.page_content for rec in file_content]
         file_content_metadata = [rec.metadata for rec in file_content]
+
+        # Create & Return chunks:
         chunks = text_splitter.create_documents(
             texts=file_content_text,
             metadatas=file_content_metadata,
