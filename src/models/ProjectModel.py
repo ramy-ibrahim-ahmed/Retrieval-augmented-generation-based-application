@@ -1,6 +1,6 @@
 from .BaseDataModel import BaseDataModel
 from .db_schemes import Project
-from .enums import DatabaseEnum
+from .enums import DataBaseEnum
 
 
 # Project model to manage project collection:
@@ -11,7 +11,7 @@ class ProjectModel(BaseDataModel):
 
         # Access the collection:
         # it will be created in MongoDB if it does not already exist when a document is inserted.
-        self.collection = self.db_client[DatabaseEnum.COLLECTION_PROJECT_NAME.value]
+        self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
 
     # Third party create collection then Indexing:
     # because apply index on collection is done after init.
@@ -30,8 +30,8 @@ class ProjectModel(BaseDataModel):
         # get list of collections to search on project collection.
         # if not exist create one and apply indexing which created in the schema.
         all_collections = await self.db_client.list_collection_names()
-        if DatabaseEnum.COLLECTION_PROJECT_NAME not in all_collections:
-            self.collection = self.db_client[DatabaseEnum.COLLECTION_PROJECT_NAME.value]
+        if DataBaseEnum.COLLECTION_PROJECT_NAME not in all_collections:
+            self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
             indexes = Project.get_indexes()
             for index in indexes:
                 await self.collection.create_index(
@@ -51,7 +51,7 @@ class ProjectModel(BaseDataModel):
 
         # Add _id to project by the actually created for it by mongo.
         # return the project instance.
-        project._id = result.inserted_id
+        project.id = result.inserted_id
         return project
 
     # Get or Create project if not exist:

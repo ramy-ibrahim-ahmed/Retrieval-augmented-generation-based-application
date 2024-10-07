@@ -13,6 +13,8 @@ class DataChunk(BaseModel):
     # logical forign key for conect data chunk with project.
     # DataChunk._id -> project._id
     chunk_project_id: ObjectId
+    
+    chunk_asset_id: ObjectId
 
     # Avoid _id strange datatype, Ignore arbitrary:
     class Config:

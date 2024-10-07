@@ -9,7 +9,7 @@ app = FastAPI()
 
 
 # Start up and end events for mongo conection and close:
-# all routs can access variable mongo_connection & db_clint.
+# all routes can access variable mongo_connection & db_clint.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # 1. get settings to get env vars.

@@ -1,6 +1,6 @@
 from .BaseDataModel import BaseDataModel
 from .db_schemes import DataChunk
-from .enums import DatabaseEnum
+from .enums import DataBaseEnum
 from bson import ObjectId
 from pymongo import InsertOne
 
@@ -11,7 +11,7 @@ class ChunkModel(BaseDataModel):
     # Get collection:
     def __init__(self, db_client: object):
         super().__init__(db_client=db_client)
-        self.collection = self.db_client[DatabaseEnum.COLLECTION_CHUNK_NAME.value]
+        self.collection = self.db_client[DataBaseEnum.COLLECTION_CHUNK_NAME.value]
 
     # Third party create collection then Indexing:
     @classmethod
@@ -23,8 +23,8 @@ class ChunkModel(BaseDataModel):
     # Apply indexes:
     async def init_collection(self):
         all_collections = await self.db_client.list_collection_names()
-        if DatabaseEnum.COLLECTION_CHUNK_NAME not in all_collections:
-            self.collection = self.db_client[DatabaseEnum.COLLECTION_CHUNK_NAME.value]
+        if DataBaseEnum.COLLECTION_CHUNK_NAME not in all_collections:
+            self.collection = self.db_client[DataBaseEnum.COLLECTION_CHUNK_NAME.value]
             indexes = DataChunk.get_indexes()
             for index in indexes:
                 await self.collection.create_index(
