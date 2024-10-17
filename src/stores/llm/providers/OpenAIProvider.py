@@ -4,8 +4,8 @@
 - So set hard validation
 """
 
-from ...LLMInterface import LLMInterface
-from ...LLMEnums import OpenAIEnums
+from ..LLMInterface import LLMInterface
+from ..LLMEnums import OpenAIEnums
 from openai import OpenAI
 
 import logging
@@ -28,7 +28,7 @@ class OpenAIProvider(LLMInterface):
         self.embedding_model_id = None
         self.embedding_size = None
 
-        self.clint = OpenAI(
+        self.client = OpenAI(
             api_key=api_key,
             api_url=api_url,
         )
@@ -46,7 +46,7 @@ class OpenAIProvider(LLMInterface):
         raise NotImplementedError
 
     def embed_text(self, text, document_type=None):
-        if not self.clint:
+        if not self.client:
             self.logger.error("Embedding model for OpenAI wasn't set, No clint!")
             return None
 
@@ -54,7 +54,7 @@ class OpenAIProvider(LLMInterface):
             self.logger.error("Embedding model for OpenAI wasn't set, No ID!")
             return None
 
-        response = self.clint.embeddings.create(
+        response = self.client.embeddings.create(
             model=self.embedding_model_id,
             input=text,
         )
@@ -75,9 +75,9 @@ class OpenAIProvider(LLMInterface):
         prompt,
         chat_history=...,
         max_output_tokens=None,
-        temprature=None,
+        temperature=None,
     ):
-        if not self.clint:
+        if not self.client:
             self.logger.error("Generation model for OpenAI wasn't set, No clint!")
             return None
 
@@ -98,11 +98,11 @@ class OpenAIProvider(LLMInterface):
             )
         )
 
-        response = self.clint.chat.completions.create(
+        response = self.client.chat.completions.create(
             model=self.generation_model_id,
             messages=chat_history,
             max_tokens=max_output_tokens,
-            temperature=temprature,
+            temperature=temperature,
         )
 
         if (
