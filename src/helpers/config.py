@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     MAX_INPUT_NUM_TOKENS: int = None
     MAX_OUTPUT_NUM_TOKENS: int = None
     GENERATION_TEMPERATURE: float = None
+    VECTOR_DB_BACKEND: str
+    VECTOR_DB_PATH: str
+    VECTOR_DB_DISTANCE_METRIC: str = None
 
     # Config .env file:
     class Config:

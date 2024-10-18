@@ -14,9 +14,19 @@ class BaseController:
         self.base_dir = os.path.dirname(os.path.dirname(__file__))
         self.file_dir = os.path.join(self.base_dir, "assets/files")
 
+        self.vectordb_dir = os.path.join(self.base_dir, "assets/database")
+
         # Make files main durectory:
         os.makedirs(self.file_dir, exist_ok=True)
 
     # Generate random string from nums and chars:
     def generate_random_str(self, length: int = 12):
         return "".join(random.choices(string.ascii_lowercase + string.digits, k=length))
+
+    def get_vectordb_path(self, vectordb_name: str):
+        vectordb_path = os.path.join(self.vectordb_dir, vectordb_name)
+
+        if not os.path.exists(vectordb_path):
+            os.makedirs(vectordb_path)
+
+        return vectordb_path
